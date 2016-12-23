@@ -42,7 +42,9 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	const Router = __webpack_require__(1);
 
 	document.addEventListener("DOMContentLoaded", () => {
 	  let navArray = Array.from(document.querySelectorAll(".sidebar-nav li"));
@@ -52,13 +54,43 @@
 	      window.location.hash = name;
 	    });
 	  });
+
+	  let contentNode = document.querySelector(".content");
+	  new Router(contentNode).start();
 	});
 
-	// document.addEventListener("DOMContentLoaded", () => {
-	//   let content = document.querySelector(".content");
-	//   router = new Router(content, routes);
-	//   router.start();
-	//   window.location.hash = "#inbox";
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	class Router {
+	  constructor(node) {
+	    this.node = node;
+	  }
+
+	  start() {
+	    this.render();
+	    window.addEventListener("hashchange", () => {
+	      this.render();
+	    });
+	  }
+
+	  activeRoute() {
+	    let hashFragment = window.location.hash;
+	    return hashFragment.slice(1);
+	  }
+
+	  render () {
+	    this.node.innerHTML = "";
+	    let currentRoute = this.activeRoute();
+	    let newRoute = document.createElement("p");
+	    newRoute.innerHTML = currentRoute;
+	    this.node.appendChild(newRoute);
+	  }
+	}
+
+	module.exports = Router;
 
 
 /***/ }
