@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.hash = name;
     });
   });
-
+  
   let contentNode = document.querySelector(".content");
   new Router(contentNode).start();
 });
