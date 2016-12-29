@@ -47,10 +47,12 @@
 	const Router = __webpack_require__(1);
 	const Inbox = __webpack_require__(2);
 	const Sent = __webpack_require__(4);
+	const Compose = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./compose.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	let routes = {
 	  inbox: Inbox,
-	  sent: Sent
+	  sent: Sent,
+	  compose: Compose
 	};
 
 	document.addEventListener("DOMContentLoaded", () => {
@@ -148,6 +150,17 @@
 	]
 	};
 
+	class Message {
+	  constructor(from, to, subject, body) {
+	    this.from = from;
+	    this.to = to;
+	    this.subject = subject;
+	    this.body = body;
+	  }
+	}
+
+	let messageDraft = new Message();
+
 	const MessageStore = {
 	  getInboxMessages() {
 	    return messages.inbox;
@@ -155,6 +168,15 @@
 
 	  getSentMessages() {
 	    return messages.sent;
+	  },
+
+	  updateDraftField(field, value) {
+	    messageDraft[field] = value;
+	  },
+
+	  sendDraft() {
+	    messages.sent.push(messageDraft);
+	    messageDraft = new Message();
 	  }
 	};
 

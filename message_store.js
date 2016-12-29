@@ -10,6 +10,17 @@ let messages = {
 ]
 };
 
+class Message {
+  constructor(from, to, subject, body) {
+    this.from = from;
+    this.to = to;
+    this.subject = subject;
+    this.body = body;
+  }
+}
+
+let messageDraft = new Message();
+
 const MessageStore = {
   getInboxMessages() {
     return messages.inbox;
@@ -17,6 +28,15 @@ const MessageStore = {
 
   getSentMessages() {
     return messages.sent;
+  },
+
+  updateDraftField(field, value) {
+    messageDraft[field] = value;
+  },
+
+  sendDraft() {
+    messages.sent.push(messageDraft);
+    messageDraft = new Message();
   }
 };
 
