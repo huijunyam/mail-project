@@ -47,6 +47,8 @@
 	const Router = __webpack_require__(1);
 
 	document.addEventListener("DOMContentLoaded", () => {
+	  let contentNode = document.querySelector(".content");
+	  new Router(contentNode).start();
 	  let navArray = Array.from(document.querySelectorAll(".sidebar-nav li"));
 	  navArray.forEach(navEl => {
 	    navEl.addEventListener("click", () => {
@@ -54,9 +56,7 @@
 	      window.location.hash = name;
 	    });
 	  });
-	  
-	  let contentNode = document.querySelector(".content");
-	  new Router(contentNode).start();
+
 	});
 
 
