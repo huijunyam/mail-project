@@ -46,16 +46,18 @@
 
 	const Router = __webpack_require__(1);
 	const Inbox = __webpack_require__(2);
+	const Sent = __webpack_require__(4);
 
 	let routes = {
-	  inbox: Inbox
+	  inbox: Inbox,
+	  sent: Sent
 	};
 
 	document.addEventListener("DOMContentLoaded", () => {
 	  let contentNode = document.querySelector(".content");
 	  new Router(contentNode, routes).start();
 	  window.location.hash = "#inbox";
-	  
+
 	  let navArray = Array.from(document.querySelectorAll(".sidebar-nav li"));
 	  navArray.forEach(navEl => {
 	    navEl.addEventListener("click", () => {
@@ -157,6 +159,35 @@
 	};
 
 	module.exports = MessageStore;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const MessageStore = __webpack_require__(3);
+
+	module.exports = {
+	  renderMessage(message) {
+	    let list = document.createElement("li");
+	    list.className = "message";
+	    list.innerHTML = `
+	    <span class="to">${message.to}</span>
+	    <span class="subject">${message.subject}</span>
+	    <span class="body">${message.body}</span>
+	    `;
+	    return list;
+	  },
+	  render() {
+	    let container = document.createElement("ul");
+	    container.className = "messages";
+	    let messages = MessageStore.getSentMessages();
+	    messages.forEach(message => {
+	      container.appendChild(this.renderMessage(message));
+	    });
+	    return container;
+	  }
+	};
 
 
 /***/ }
