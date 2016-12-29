@@ -45,10 +45,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const Router = __webpack_require__(1);
+	const Inbox = __webpack_require__(2);
+
+	let routes = {
+	  inbox: Inbox
+	};
 
 	document.addEventListener("DOMContentLoaded", () => {
 	  let contentNode = document.querySelector(".content");
-	  new Router(contentNode).start();
+	  new Router(contentNode, routes).start();
 	  let navArray = Array.from(document.querySelectorAll(".sidebar-nav li"));
 	  navArray.forEach(navEl => {
 	    navEl.addEventListener("click", () => {
@@ -65,8 +70,9 @@
 /***/ function(module, exports) {
 
 	class Router {
-	  constructor(node) {
+	  constructor(node, routes) {
 	    this.node = node;
+	    this.routes = routes;
 	  }
 
 	  start() {
@@ -77,20 +83,36 @@
 	  }
 
 	  activeRoute() {
-	    let hashFragment = window.location.hash;
-	    return hashFragment.slice(1);
+	    let hashFragment = window.location.hash.slice(1);
+	    return this.routes[hashFragment];
 	  }
 
 	  render () {
 	    this.node.innerHTML = "";
-	    let currentRoute = this.activeRoute();
-	    let newRoute = document.createElement("p");
-	    newRoute.innerHTML = currentRoute;
-	    this.node.appendChild(newRoute);
+	    let component = this.activeRoute();
+	    if (component) {
+	      this.node.appendChild(component.render());
+	    }
 	  }
 	}
 
 	module.exports = Router;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	class Inbox {
+	  render() {
+	    let container = document.createElement("ul");
+	    container.className = "messages";
+	    container.innerHTML = "An Inbox Message";
+	    return container;
+	  }
+	}
+
+	module.exports = Inbox;
 
 
 /***/ }
