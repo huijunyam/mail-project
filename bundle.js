@@ -54,6 +54,8 @@
 	document.addEventListener("DOMContentLoaded", () => {
 	  let contentNode = document.querySelector(".content");
 	  new Router(contentNode, routes).start();
+	  window.location.hash = "#inbox";
+	  
 	  let navArray = Array.from(document.querySelectorAll(".sidebar-nav li"));
 	  navArray.forEach(navEl => {
 	    navEl.addEventListener("click", () => {
@@ -101,16 +103,60 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	const MessageStore = __webpack_require__(3);
 
 	module.exports = {
+	  renderMessage(message) {
+	    let list = document.createElement("li");
+	    list.className = "message";
+	    list.innerHTML = `
+	    <span class="from">${message.from}</span>
+	    <span class="subject">${message.subject}</span>
+	    <span class="body">${message.body}</span>
+	    `;
+	    return list;
+	  },
 	  render() {
 	    let container = document.createElement("ul");
 	    container.className = "messages";
-	    container.innerHTML = "An Inbox Message";
+	    let messages = MessageStore.getInboxMessages();
+	    messages.forEach(message => {
+	      container.appendChild(this.renderMessage(message));
+	    });
 	    return container;
 	  }
 	};
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	let messages = {
+	  sent: [
+	    {to: "friend@mail.com", subject: "Check this out", body: "It's so cool"},
+	    {to: "person@mail.com", subject: "zzz", body: "so booring"}
+	  ],
+	  inbox: [
+	    {from: "grandma@mail.com", subject: "Fwd: Fwd: Fwd: Check this out", body:
+	"Stay at home mom discovers cure for leg cramps. Doctors hate her"},
+	  {from: "person@mail.com", subject: "Questionnaire", body: "Take this free quiz win $1000 dollars"}
+	]
+	};
+
+	const MessageStore = {
+	  getInboxMessages() {
+	    return messages.inbox;
+	  },
+
+	  getSentMessages() {
+	    return messages.sent;
+	  }
+	};
+
+	module.exports = MessageStore;
 
 
 /***/ }
