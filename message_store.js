@@ -1,5 +1,5 @@
 class Message {
-  constructor(from, to, subject, body) {
+  constructor(from, to = "", subject = "", body = "") {
     this.from = from;
     this.to = to;
     this.subject = subject;
