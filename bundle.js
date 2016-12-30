@@ -47,7 +47,7 @@
 	const Router = __webpack_require__(1);
 	const Inbox = __webpack_require__(2);
 	const Sent = __webpack_require__(4);
-	const Compose = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./compose.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	const Compose = __webpack_require__(5);
 
 	let routes = {
 	  inbox: Inbox,
@@ -170,6 +170,10 @@
 	    return messages.sent;
 	  },
 
+	  getMessageDraft() {
+	    return messageDraft;
+	  },
+
 	  updateDraftField(field, value) {
 	    messageDraft[field] = value;
 	  },
@@ -206,6 +210,44 @@
 	    let messages = MessageStore.getSentMessages();
 	    messages.forEach(message => {
 	      container.appendChild(this.renderMessage(message));
+	    });
+	    return container;
+	  }
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const MessageStore = __webpack_require__(3);
+
+	module.exports = {
+	  renderForm() {
+	    let currentMessage = MessageStore.getMessageDraft();
+	    let content = `
+	      <p class="new-message-header">New Message</p>
+	      <form class="compose-form">
+	      <input placeholder="Recipient" name="to" type="text" value="${currentMessage.to}">
+	      <input placeholder="Subject" name="subject" type="text" value="${currentMessage.subject}">
+	      <textarea name="body" rows="20">${currentMessage.body}</textarea>
+	      <button type="submit" class="btn btn-primary submit-message">Send</button>
+	      </form>
+	    `;
+	    return content;
+	  },
+	  render() {
+	    let container = document.createElement("div");
+	    container.className = "new-message";
+	    container.innerHTML = this.renderForm();
+	    container.addEventListener("change", e => {
+	      let target = e.target;
+	      MessageStore.updateDraftField(target.name, target.value);
+	    });
+	    container.addEventListener("submit", e => {
+	      e.preventDefault();
+	      MessageStore.sendDraft();
+	      location.hash = "inbox";
 	    });
 	    return container;
 	  }

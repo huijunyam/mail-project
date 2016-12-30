@@ -30,6 +30,10 @@ const MessageStore = {
     return messages.sent;
   },
 
+  getMessageDraft() {
+    return messageDraft;
+  },
+
   updateDraftField(field, value) {
     messageDraft[field] = value;
   },
